@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="hero" id="page01">
+        <div class="overlay"></div>
+            <div class="content">
+                <div class="banner">
+                    <div>
+                        <span class="logo">HOLLYWOOD <br>FILMS</span>
+                    </div>
+                    <div class="top_part">
+                    <div class="login">
+                        <a href="/login">Login</a>
+                    </div>
+
+                    <div class="dark-mode-toggle">
+                            <label class="switch">
+                                <input type="checkbox" id="dark-mode-checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                    </div>
+                </div>
+            </div>
+
+            <span class="slogan"> Amazing movies, and more....</span>
+            <!-- Display the result for searching... -->
+            <div class="search">
+            <form action="/#page06" id="search_form" method="post">
+                <input type="text" name="key_word_search" id="key_word_search"
+                    placeholder="movie / firstname / genre / director / star">
+                <input type="submit" value="Search..">
+            </form>
+        </div>
+
+    </div>
+    <img src="{{ url_for('static', filename='images/Laptop.png') }}" alt="laptop"
+        class="laptop_image" height="400">
+</div>
+
+<!--- page 02 -->
+<div id="page02">
+    <span class="title"> 12 highest rating movies</span>
+    <div class="content_page02">
+        <div class="top_movies">
+
+                {% for movie in top_movies %}
+                <img src="{{ movie.poster }}" alt="movie_photo">
+                {% endfor %}
+
+        </div>
+        <div class="media_container">
+            <img src="{{ url_for('static', filename='images/ipad.png') }}" alt="ipad"
+            class="ipad_image" height="250">
+            <video class="video_overlay" controls autoplay loop>
+                <source src="{{ url_for('static', filename='images/video.mp4') }}"
+                        type="video/quicktime">
+            </video>
+
+        </div>
+    </div>
+</div>
+
+<!-- page 03 -->
+<div id="page03">
+    <span class="title"> Recommendation movies for amazing night..</span>
+    <div class="page03_content">
+        {% if recommendation_movie %}
+        <div class="movie_left">
+
+            <img src="{{ recommendation_movie.poster }}" alt="movie_poster">
+
+        </div>
+        <div class="movie_right">
+            <span class="movie_title">{{ recommendation_movie.title }}</span><br>
+            <span class="movie_director">Director: {{ recommendation_movie.director.upper() }}</span><br>
+            <span class="movie_star">Star: <br>{{ recommendation_movie_details.stars }}</span><br>
+            <span class="movie_genre">Genre: {{ recommendation_movie_details.genres }}</span>
+            <span></span>
+            <div class="release_rating">
+                <span>Release: {{ recommendation_movie.year_release }} | </span>
+                <span> IMDb rating: {{ recommendation_movie.rating }}</span>
+            </div>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+<!--{{ return_message }}-->
+
+<!-- page 04 -->
+<div id="page04">
+<!-- Display the users list -->
+
+    <div class="button_add"><a  href="/add_user">Add <br>user</a></div>
+        <div class="users">
+        {% for user in users %}
+            <div class="user">
+                <div class="user_circle">
+                    <span class="user_id">{{ user.id }}</span>
+                </div>
+                <span class="user_name">{{ user.first_name}}, {{ user.last_name.upper() }}</span><br>
+                <span class="user_email">{{ user.email }}</span><br>
+                
+                <div class="user_update_delete">
+                    <form action="/user/{{ user.id }}/delete" method="post">
+                        <input class="button_sub_a" type="submit" value="Delete">
+                    </form>
+                    <div class="button_sub_a">
+                        <a href=" {{ url_for('update_user', id=user.id) }}">Update</a>
+                     </div>
+                </div>
+                <div class="button_sub_b">
+                    <a href="/users/{{ user.id }}/add_movie">Add movie</a>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+</div>
+    <div class="summary">
+        <div class="box">
+            <span class="sub_tittle">DIRECTORS</span>
+            <ul>
+                {% for director in directors %}
+                <li><a href="{{ director.link }}">{{ director.name }}</a></li><br>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="box">
+            <span class="sub_tittle">STARS</span>
+            <ul>
+                {% for star in stars %}
+                <li><a href="{{ star.link }}">{{ star.name }}</a></li><br>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+
+    <!--- page 05 -->
+<div id="page05">
+    <!-- <span class="title"> The list of movies</span> -->
+<div class="slider_container">
+
+    <div class="content_page05">
+        <div class="movies">
+        {% for movie in movies %}
+
+            <div class="movie_details">
+                <img src="{{ movie.poster }}" alt="movie_poster">
+                <span class="movie_title">{{ movie.title }}</span><br><br>
+                <span>-- Director: {{ movie.director }} --</span><br><br>
+                <span>Year: {{ movie.year_release }} | IMDb rating: {{ movie.rating }}</span><br><br>
+
+                <div class="choose_button">
+                    <form action="/movie/{{ movie.id }}/delete" method="post">
+                        <input class="button_sub_a" type="submit" value="Delete">
+                    </form>
+                    <div class="button_sub_a">
+                        <a href=" {{ url_for('update_movie', id=movie.id) }}">Update</a>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- Result of searching / page06-->
+<div id="page06">
+
+    <span class="title"> For your searching... {{ return_message }}</span>
+    <div class="search_results" id="search_results">
+    {% if search_result %}
+        <table>
+            <tr>
+                <th style="width: 100px;">MOVIE</th>
+                <th style="width: 100px;">DIRECTOR</th>
+                <th style="width: 100px;">STARS</th>
+                <th style="width: 100px;">RELEASE</th>
+                <th style="width: 100px;">GENRE</th>
+                <th style="width: 200px;">CONTENT</th>
+                <th style="width: 100px;">AWARDS</th>
+                <th style="width: 100px;">RUNTIME</th>
+            </tr>
+            {% for movie in search_result %}
+            <tr>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.director }}</td>
+                <td>{{ movie.stars }}</td>
+                <td>{{ movie.year }}</td>
+                <td>{{ movie.genres }}</td>
+                <td><p>{{ movie.content }}</p></td>
+                <td>{{ movie.awards }}</td>
+                <td>{{ movie.runtime }}</td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

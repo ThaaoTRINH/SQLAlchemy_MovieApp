@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form_outside">
+    <h1>Login</h1>
+    <form method="POST" action="{{ url_for('login', next=request.args.get('next')) }}">
+      <label for="username">Username:</label><br>
+      <input type="text" id="username" name="username" required><br><br>
+      <label for="password">Password:</label><br>
+      <input type="password" id="password" name="password" required><br><br>
+      <input class="button_form" type="submit" value="Login">
+    </form>
+    <span class="return_message">{{ return_message }}</span>
+</div>
+{% endblock %}

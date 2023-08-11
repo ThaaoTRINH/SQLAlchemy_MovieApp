@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Weekly Movie Recommendations</h1>
+    <p>Here are your recommended movies for this week:</p>
+    <ul>
+        {% for movie in recommendations %}
+            <li>{{ movie.title }} - {{ movie.genre }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
